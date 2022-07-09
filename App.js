@@ -16,6 +16,10 @@ import {
   Text,
   useColorScheme,
   View,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TextInput,
 } from 'react-native';
 
 import {
@@ -27,6 +31,9 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import SplashScreen from 'react-native-splash-screen';
+
+import Clock from './components/clock';
+import JoinGroup from './components/join';
 
 const Section = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -61,36 +68,34 @@ const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? '#00222B' : Colors.lighter,
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={{backgroundColor: '#00222B', height: '100%'}}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{backgroundColor: '#00222B'}}>
+          <Clock
+            style={{
+              textAlign: 'center',
+              fontSize: 128,
+              backgroundColor: '#00222B',
+              color: 'white',
+              marginTop: 200,
+              marginBottom: 100,
+            }}></Clock>
+
+          <JoinGroup
+            style={{
+              backgroundColor: '#00222B',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}></JoinGroup>
         </View>
-      </ScrollView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };
