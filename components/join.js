@@ -30,6 +30,7 @@ const JoinGroup = props => {
         placeholderTextColor={'gray'}
         onChangeText={newCode => setCode(newCode)}
         keyboardType="numeric"
+        maxLength={6}
         onSubmitEditing={handleSubmit}></TextInput>
 
       <TouchableOpacity
