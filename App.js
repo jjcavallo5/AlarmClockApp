@@ -33,8 +33,10 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import SplashScreen from 'react-native-splash-screen';
 
+import AddAlarmScreen from './screens/addAlarm';
 import Homescreen from './screens/homescreen';
-import AddAlarmScreen from './screens/addAlarm.js';
+import LoginScreen from './screens/login';
+import RegisterScreen from './screens/register';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +54,8 @@ const App = () => {
         }}>
         <Stack.Screen name="Home" component={Homescreen} />
         <Stack.Screen name="AddAlarm" component={AddAlarmScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

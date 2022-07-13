@@ -49,7 +49,7 @@ const Homescreen = ({navigation}) => {
                 fontSize: 60,
               }}
               onPress={() => {
-                navigation.navigate('AddAlarm');
+                navigation.navigate('Login');
               }}>
               +
             </Text>
