@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import PageHeader from '../components/pageHeader';
+import colors from '../assets/colors';
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState('');
@@ -78,9 +79,9 @@ const RegisterScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  page: {backgroundColor: '#1e1e1e', height: '100%'},
+  page: {backgroundColor: colors.darkGray, height: '100%'},
   container: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: colors.darkGray,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

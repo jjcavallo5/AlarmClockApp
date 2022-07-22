@@ -1,81 +1,71 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-/**
- * VSCode Dark Theme Color Palette:
- * https://github.com/tcd/dark-plus-syntax/blob/master/src/palettes/DarkPlusPalette.ts
- */
-
 import React from 'react';
-import {Node} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  TextInput,
-  TouchableOpacity,
 } from 'react-native';
 
 import Clock from '../components/clock';
 import JoinGroup from '../components/join';
+import colors from '../assets/colors';
 
 const Homescreen = ({navigation}) => {
   return (
-    <SafeAreaView style={{backgroundColor: '#1e1e1e', height: '100%'}}>
+    <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="position">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={{backgroundColor: '#1e1e1e'}}>
+          <View>
             <Text
-              style={{
-                position: 'absolute',
-                top: 10,
-                right: 10,
-                zIndex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 60,
-              }}
+              style={styles.addAlarmButtonText}
               onPress={() => {
                 navigation.navigate('Login');
               }}>
               +
             </Text>
-            <Clock
-              style={{
-                textAlign: 'center',
-                fontSize: 128,
-                backgroundColor: '#1e1e1e',
-                color: 'white',
-                paddingTop: 200,
-                paddingBottom: 100,
-              }}
-            />
-            <JoinGroup
-              style={{
-                backgroundColor: '#1e1e1e',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            />
+            <Clock style={styles.clock} />
+            <JoinGroup style={styles.join} />
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.darkGray,
+    height: '100%',
+  },
+  addAlarmButtonText: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 60,
+    color: 'white',
+    opacity: 0.7,
+  },
+  clock: {
+    textAlign: 'center',
+    fontSize: 128,
+    backgroundColor: colors.darkGray,
+    color: 'white',
+    paddingTop: 200,
+    paddingBottom: 100,
+  },
+  join: {
+    backgroundColor: colors.darkGray,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export default Homescreen;

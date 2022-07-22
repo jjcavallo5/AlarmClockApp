@@ -3,6 +3,8 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import colors from '../assets/colors';
+
 const PageHeader = props => {
   const navigation = useNavigation();
   return (
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
   },
   bottomShape: {
     borderTopLeftRadius: 50,
-    backgroundColor: '#1e1e1e',
+    backgroundColor: colors.darkGray,
     width: '100%',
     height: 50,
     marginTop: 50,

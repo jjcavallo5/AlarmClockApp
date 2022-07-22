@@ -12,21 +12,6 @@
  */
 
 import React from 'react';
-import {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -44,7 +29,6 @@ const App = () => {
   React.useEffect(() => {
     SplashScreen.hide();
   });
-  const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <NavigationContainer>

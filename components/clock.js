@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {Text} from 'react-native';
 
+//! No AM/PM Calculation
+
 const nowDate = () => {
   const d = new Date();
   let s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
   let m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-  let h = d.getHours();
+  let h = d.getHours() % 12;
   return {s, m, h};
 };
 
