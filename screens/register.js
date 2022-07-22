@@ -14,14 +14,32 @@ import {
 
 import PageHeader from '../components/pageHeader';
 import colors from '../assets/colors';
+import {registerUser} from '../backend/authentication';
 
-const RegisterScreen = () => {
+const RegisterScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [pwDontMatch, setPwDontMatch] = useState('none');
+  const [pwTooShort, setPwTooShort] = useState('none');
   const [invalidEmail, setInvalidEmail] = useState('none');
   const [emailInUse, setEmailInUse] = useState('none');
+
+  function handleSubmit() {
+    if (pass.length < 8) {
+      setPwTooShort('flex');
+      return;
+    }
+
+    if (pass != confirmPass) {
+      setPwDontMatch('flex');
+      return;
+    }
+
+    // *** Call to database ***
+    registerUser(email, pass, setInvalidEmail, setEmailInUse, navigation);
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.page}>
@@ -53,17 +71,15 @@ const RegisterScreen = () => {
             textContentType={'password'}
             secureTextEntry={true}
           />
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={() => {
-              console.log(email);
-              console.log(pass);
-            }}>
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
             <Text style={{color: 'black'}}>Create Account</Text>
           </TouchableOpacity>
           <View>
             <Text style={{display: pwDontMatch, color: 'red', marginTop: 10}}>
               Passwords don't match
+            </Text>
+            <Text style={{display: pwTooShort, color: 'red', marginTop: 10}}>
+              Password must be 8 characters or more
             </Text>
             <Text style={{display: invalidEmail, color: 'red', marginTop: 10}}>
               Invalid email
