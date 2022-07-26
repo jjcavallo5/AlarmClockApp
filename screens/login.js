@@ -14,10 +14,28 @@ import {
 
 import PageHeader from '../components/pageHeader';
 import colors from '../assets/colors';
+import {loginUser} from '../backend/authentication';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
+  const [errorStatus, setErrorStatus] = useState({
+    display: 'none',
+    message: '',
+  });
+
+  const handleSubmit = () => {
+    if (email === '' || pass === '') {
+      setErrorStatus({
+        display: 'flex',
+        message: 'Enter both email and password',
+      });
+      return;
+    }
+
+    loginUser(email, pass, setErrorStatus, navigation);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.page}>
@@ -41,12 +59,7 @@ const LoginScreen = ({navigation}) => {
             textContentType={'password'}
             secureTextEntry={true}
           />
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={() => {
-              console.log(email);
-              console.log(pass);
-            }}>
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
             <Text style={{color: 'black'}}>Log In</Text>
           </TouchableOpacity>
           <View style={styles.registerContainer}>
@@ -54,6 +67,16 @@ const LoginScreen = ({navigation}) => {
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
               <Text style={{color: 'skyblue'}}>Sign Up</Text>
             </TouchableOpacity>
+          </View>
+          <View>
+            <Text
+              style={{
+                display: errorStatus.display,
+                color: 'red',
+                marginTop: 10,
+              }}>
+              {errorStatus.message}
+            </Text>
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>

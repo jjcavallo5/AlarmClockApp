@@ -20,24 +20,27 @@ const RegisterScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
-  const [pwDontMatch, setPwDontMatch] = useState('none');
-  const [pwTooShort, setPwTooShort] = useState('none');
-  const [invalidEmail, setInvalidEmail] = useState('none');
-  const [emailInUse, setEmailInUse] = useState('none');
+  const [errorStatus, setErrorStatus] = useState({
+    display: 'none',
+    message: '',
+  });
 
   function handleSubmit() {
     if (pass.length < 8) {
-      setPwTooShort('flex');
+      setErrorStatus({
+        display: 'flex',
+        message: 'Password must be at least 8 characters',
+      });
       return;
     }
 
     if (pass != confirmPass) {
-      setPwDontMatch('flex');
+      setErrorStatus({display: 'flex', message: 'Passwords do not match'});
       return;
     }
 
     // *** Call to database ***
-    registerUser(email, pass, setInvalidEmail, setEmailInUse, navigation);
+    registerUser(email, pass, setErrorStatus, navigation);
   }
 
   return (
@@ -75,17 +78,13 @@ const RegisterScreen = ({navigation}) => {
             <Text style={{color: 'black'}}>Create Account</Text>
           </TouchableOpacity>
           <View>
-            <Text style={{display: pwDontMatch, color: 'red', marginTop: 10}}>
-              Passwords don't match
-            </Text>
-            <Text style={{display: pwTooShort, color: 'red', marginTop: 10}}>
-              Password must be 8 characters or more
-            </Text>
-            <Text style={{display: invalidEmail, color: 'red', marginTop: 10}}>
-              Invalid email
-            </Text>
-            <Text style={{display: emailInUse, color: 'red', marginTop: 10}}>
-              Email already in use
+            <Text
+              style={{
+                display: errorStatus.display,
+                color: 'red',
+                marginTop: 10,
+              }}>
+              {errorStatus.message}
             </Text>
           </View>
         </KeyboardAvoidingView>
