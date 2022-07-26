@@ -7,23 +7,39 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Image,
+  TouchableOpacity,
 } from 'react-native';
 
 import Clock from '../components/clock';
 import JoinGroup from '../components/join';
 import colors from '../assets/colors';
+import {getCurrentUser} from '../backend/authentication';
 
 const Homescreen = ({navigation}) => {
+  const handlePlus = () => {
+    if (getCurrentUser() == null) navigation.navigate('Login');
+    else navigation.navigate('AddAlarm');
+  };
+
+  const handleSettingsPress = () => {
+    navigation.navigate('Settings');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="position">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View>
-            <Text
-              style={styles.addAlarmButtonText}
-              onPress={() => {
-                navigation.navigate('Login');
-              }}>
+            <TouchableOpacity
+              style={styles.settingsContainer}
+              onPress={handleSettingsPress}>
+              <Image
+                source={require('../assets/settingsIcon.png')}
+                style={styles.settings}
+              />
+            </TouchableOpacity>
+            <Text style={styles.addAlarmButtonText} onPress={handlePlus}>
               +
             </Text>
             <Clock style={styles.clock} />
@@ -39,6 +55,17 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.darkGray,
     height: '100%',
+  },
+  settingsContainer: {
+    position: 'absolute',
+    top: 30,
+    left: 10,
+    zIndex: 1,
+  },
+  settings: {
+    height: 50,
+    width: 50,
+    opacity: 0.7,
   },
   addAlarmButtonText: {
     position: 'absolute',

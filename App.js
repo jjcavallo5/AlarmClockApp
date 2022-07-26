@@ -22,6 +22,7 @@ import AddAlarmScreen from './screens/addAlarm';
 import Homescreen from './screens/homescreen';
 import LoginScreen from './screens/login';
 import RegisterScreen from './screens/register';
+import SettingsScreen from './screens/settings';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,7 @@ const App = () => {
         <Stack.Screen name="AddAlarm" component={AddAlarmScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

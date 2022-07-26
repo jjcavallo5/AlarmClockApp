@@ -36,3 +36,12 @@ export function loginUser(email, pass, setErrorStatus, navigation) {
       return;
     });
 }
+
+export function getCurrentUser() {
+  if (auth().currentUser) return auth().currentUser.email;
+  return null;
+}
+
+export function logoutUser() {
+  auth().signOut();
+}
