@@ -43,5 +43,5 @@ export function getCurrentUser() {
 }
 
 export function logoutUser() {
-  auth().signOut();
+  if (auth().currentUser) auth().signOut();
 }
