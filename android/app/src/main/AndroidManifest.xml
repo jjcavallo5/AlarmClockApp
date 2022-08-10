@@ -2,6 +2,7 @@
   package="com.alarmclock">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
       android:name=".MainApplication"
@@ -22,5 +23,7 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+      <receiver android:name="AlarmReceiver" />
+      <service android:name="AlarmPlayingService" />
     </application>
 </manifest>
