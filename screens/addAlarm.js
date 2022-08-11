@@ -12,6 +12,12 @@ import PageHeader from '../components/pageHeader';
 
 const {AlarmModule} = NativeModules;
 
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import PushNotification from 'react-native-push-notification';
+import notificationJson from '../backend/notification.json';
+
+const ALARM_TIME_TEST = new Date(Date.now() + 10000);
+
 const AddAlarmScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
@@ -19,7 +25,12 @@ const AddAlarmScreen = ({navigation}) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          AlarmModule.createAlarmEvent('test', 'test', message => {
+          let time = ALARM_TIME_TEST.getTime();
+          AlarmModule.createAlarmEvent('test', time.toString(), message => {
+            PushNotification.localNotificationSchedule({
+              ...notificationJson,
+              date: ALARM_TIME_TEST,
+            });
             console.log(message);
           });
         }}>
@@ -46,7 +57,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    backgroundColor: 'slate',
+    backgroundColor: 'white',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

@@ -16,6 +16,10 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 
 public class AlarmModule extends ReactContextBaseJavaModule {
     AlarmModule(ReactApplicationContext context) {
@@ -29,12 +33,12 @@ public class AlarmModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void createAlarmEvent(String name, String time, Callback callback) {
-        callback.invoke("Hi from java");
 
         Intent intent = new Intent(getCurrentActivity(), AlarmReceiver.class);
         PendingIntent pending = PendingIntent.getBroadcast(getCurrentActivity(), 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getCurrentActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, pending);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, Long.parseLong(time), pending);
+        callback.invoke("Alarm scheduled");
     }
 
     @ReactMethod
