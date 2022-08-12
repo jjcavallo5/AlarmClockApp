@@ -15,8 +15,6 @@ import React from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import PushNotification, {Importance} from 'react-native-push-notification';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import SplashScreen from 'react-native-splash-screen';
 
@@ -25,53 +23,10 @@ import Homescreen from './screens/homescreen';
 import LoginScreen from './screens/login';
 import RegisterScreen from './screens/register';
 import SettingsScreen from './screens/settings';
+import {configureNotifications} from './backend/notifications';
 
 const Stack = createNativeStackNavigator();
-
-PushNotification.createChannel(
-  {
-    channelId: 'ALARM-CHANNEL',
-    channelName: 'My channel',
-    channelDescription: 'A channel to categorise your notifications',
-    playSound: false,
-    soundName: 'default',
-    importance: Importance.HIGH,
-    vibrate: true,
-  },
-  created => console.log(`createChannel returned '${created}'`),
-);
-
-PushNotification.configure({
-  onRegister: function (token) {
-    console.log('TOKEN:', token);
-  },
-
-  onNotification: function (notification) {
-    console.log('NOTIFICATION:', notification);
-    notification.finish(PushNotificationIOS.FetchResult.NoData);
-  },
-
-  onAction: function (notification) {
-    console.log('ACTION:', notification.action);
-    console.log('NOTIFICATION:', notification);
-
-    // process the action
-  },
-
-  onRegistrationError: function (err) {
-    console.error(err.message, err);
-  },
-
-  permissions: {
-    alert: true,
-    badge: true,
-    sound: true,
-  },
-
-  popInitialNotification: true,
-
-  requestPermissions: true,
-});
+configureNotifications();
 
 const App = () => {
   React.useEffect(() => {
