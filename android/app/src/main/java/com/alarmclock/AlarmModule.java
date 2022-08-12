@@ -32,24 +32,24 @@ public class AlarmModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void createAlarmEvent(String name, String time, Callback callback) {
+    public void createAlarmEvent(int UID, String time, Callback callback) {
 
         Intent intent = new Intent(getCurrentActivity(), AlarmReceiver.class);
-        PendingIntent pending = PendingIntent.getBroadcast(getCurrentActivity(), 0, intent, 0);
+        PendingIntent pending = PendingIntent.getBroadcast(getCurrentActivity(), UID, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getCurrentActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, Long.parseLong(time), pending);
         callback.invoke("Alarm scheduled");
     }
 
     @ReactMethod
-    public void endAlarmEvent(String name, String time, Callback callback) {
+    public void endAlarmEvent(int UID, String time, Callback callback) {
         callback.invoke("Alarm Ended");
 
         Intent stopIntent = new Intent(getCurrentActivity(), AlarmPlayingService.class);
         getCurrentActivity().stopService(stopIntent);
 
         Intent intent = new Intent(getCurrentActivity(), AlarmReceiver.class);
-        PendingIntent pending = PendingIntent.getBroadcast(getCurrentActivity(), 0, intent, 0);
+        PendingIntent pending = PendingIntent.getBroadcast(getCurrentActivity(), UID, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getCurrentActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pending);
     }

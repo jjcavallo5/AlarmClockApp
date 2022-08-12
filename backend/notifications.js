@@ -27,21 +27,30 @@ export function configureNotifications() {
 
       //notification.finish(PushNotificationIOS.FetchResult.NoData);
       if (notification.action == 'Dismiss' || notification.action == 'Snooze') {
-        AlarmModule.endAlarmEvent('test', 'test', message => {
-          console.log(message);
-        });
+        AlarmModule.endAlarmEvent(
+          parseInt(notification.id),
+          'test',
+          message => {
+            console.log(message);
+          },
+        );
       }
 
       if (notification.action == 'Snooze') {
         let newAlarmTime = new Date(Date.now() + 7 * 60 * 1000);
         let time = newAlarmTime.getTime();
-        AlarmModule.createAlarmEvent('test', time.toString(), message => {
-          PushNotification.localNotificationSchedule({
-            ...notificationJson,
-            date: newAlarmTime,
-          });
-          console.log(message);
-        });
+        AlarmModule.createAlarmEvent(
+          parseInt(notification.id),
+          time.toString(),
+          message => {
+            PushNotification.localNotificationSchedule({
+              ...notificationJson,
+              date: newAlarmTime,
+              id: notification.id,
+            });
+            console.log(message);
+          },
+        );
       }
     },
 

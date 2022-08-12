@@ -31,7 +31,6 @@
   "invokeApp": true,
   "category": "",
   "subtitle": "My Notification Subtitle",
-  "id": 0,
   "title": "Squad Sync Alarm",
   "message": "Wake up!",
   "picture": "https://www.example.tld/picture.jpg",
