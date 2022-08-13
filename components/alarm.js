@@ -1,10 +1,32 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View, Switch} from 'react-native';
+import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Switch,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+
+import {formatAMPM} from '../assets/utilities';
 
 const AlarmComponent = props => {
   return (
     <View style={styles.container}>
-      <Text style={styles.time}>{props.alarm.fireTime}</Text>
+      {props.showDelete && (
+        <TouchableOpacity onPress={() => props.deleteCallback(props.alarm.UID)}>
+          <Image
+            source={require('../assets/deleteIcon.png')}
+            style={styles.delete}
+          />
+        </TouchableOpacity>
+      )}
+      <Text style={styles.time}>
+        {formatAMPM(props.alarm.fireTime).split(' ')[0]}
+      </Text>
+      <Text style={styles.AMPM}>
+        {formatAMPM(props.alarm.fireTime).split(' ')[1]}
+      </Text>
       <Switch
         style={styles.switch}
         onValueChange={() => {
@@ -26,12 +48,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderTopColor: 'white',
     borderTopWidth: 0.25,
-    borderBottomColor: 'white',
-    borderBottomWidth: 0.25,
+  },
+  delete: {
+    height: 20,
+    width: 20,
   },
   time: {
     fontSize: 48,
     marginLeft: 10,
+  },
+  AMPM: {
+    fontSize: 24,
+    marginLeft: 5,
   },
   switch: {
     position: 'absolute',

@@ -9,7 +9,6 @@ import {
   Modal,
 } from 'react-native';
 import colors from '../assets/colors';
-import DateTimePicker from '@react-native-community/datetimepicker';
 
 import PageHeader from '../components/pageHeader';
 
@@ -20,28 +19,30 @@ import notificationJson from '../backend/notification.json';
 import AlarmComponent from '../components/alarm';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 
-function formatAMPM(date) {
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'pm' : 'am';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
-  return strTime;
-}
+import {formatAMPM, getLowestUniqueInteger} from '../assets/utilities';
 
 const AddAlarmScreen = ({navigation}) => {
   const [alarmList, setAlarmList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(new Date(Date.now()));
   const [showPicker, setShowPicker] = useState(false);
-  const scheduleAlarm = (UID, timeToFire) => {
-    let time = timeToFire.getTime();
+  const [isEditing, setIsEditing] = useState(false);
+
+  const scheduleAlarm = (UID, fireTime) => {
+    let time = fireTime.getTime();
     AlarmModule.createAlarmEvent(UID, time.toString(), message => {
       PushNotification.localNotificationSchedule({
         ...notificationJson,
-        date: timeToFire,
+        date: fireTime,
+        id: UID,
+      });
+      console.log(message);
+    });
+  };
+
+  const cancelAlarm = UID => {
+    AlarmModule.endAlarmEvent(UID, 'test', message => {
+      PushNotification.cancelLocalNotification({
         id: UID,
       });
       console.log(message);
@@ -49,11 +50,14 @@ const AddAlarmScreen = ({navigation}) => {
   };
 
   const createAlarm = () => {
-    let UID = alarmList.length;
-    //createAlarm(something, date)
+    let takenUIDS = alarmList.map(alarm => {
+      return alarm.UID;
+    });
+    let UID = getLowestUniqueInteger(takenUIDS);
+    scheduleAlarm(UID, date);
     let alarmObject = {
       UID: UID,
-      fireTime: formatAMPM(date),
+      fireTime: date,
       active: true,
     };
 
@@ -62,15 +66,26 @@ const AddAlarmScreen = ({navigation}) => {
   };
 
   const activateAlarmCallback = UID => {
-    console.log(UID);
-    console.log(alarmList);
     setAlarmList(current =>
       current.map(alarm => {
         if (alarm.UID == UID) {
-          console.log(alarm.active);
+          if (alarm.active) {
+            cancelAlarm(UID);
+          } else {
+            scheduleAlarm(UID, alarm.fireTime);
+          }
           return {...alarm, active: !alarm.active};
         }
         return alarm;
+      }),
+    );
+  };
+
+  const deleteAlarmCallback = UID => {
+    cancelAlarm(UID);
+    setAlarmList(current =>
+      current.filter(alarm => {
+        return alarm.UID !== UID;
       }),
     );
   };
@@ -79,12 +94,15 @@ const AddAlarmScreen = ({navigation}) => {
     <View style={styles.container}>
       <PageHeader text={'Add Alarm'} />
       <View style={styles.topBar}>
-        <TouchableOpacity>
-          <Text style={styles.topBarText}>Edit</Text>
+        <TouchableOpacity onPress={() => setIsEditing(!isEditing)}>
+          <Text style={styles.topBarText}>{isEditing ? 'Done' : 'Edit'}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.topBarButton}
-          onPress={() => setModalVisible(true)}>
+          onPress={() => {
+            setModalVisible(true);
+            setIsEditing(false);
+          }}>
           <Text style={styles.topBarPlus}>+</Text>
         </TouchableOpacity>
       </View>
@@ -93,6 +111,8 @@ const AddAlarmScreen = ({navigation}) => {
           <AlarmComponent
             alarm={alarm}
             callback={activateAlarmCallback}
+            showDelete={isEditing}
+            deleteCallback={deleteAlarmCallback}
             key={alarm.UID}
           />
         ))}
@@ -114,6 +134,7 @@ const AddAlarmScreen = ({navigation}) => {
             {showPicker && (
               <RNDateTimePicker
                 mode="time"
+                display="spinner"
                 value={date}
                 onChange={(event, selected) => {
                   setShowPicker(false);
@@ -175,9 +196,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   modal: {
-    height: '80%',
+    height: '50%',
     width: '80%',
-    backgroundColor: 'blue',
+    backgroundColor: '#404040',
     borderTopLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
@@ -194,6 +215,7 @@ const styles = StyleSheet.create({
     fontSize: 64,
     width: '100%',
     textAlign: 'center',
+    marginTop: 30,
   },
 });
 
